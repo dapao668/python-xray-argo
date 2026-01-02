@@ -26,8 +26,8 @@ ARGO_PORT = int(os.environ.get("PORT", "8001"))  # Argo监听端口
 CFIP = os.environ.get("CFIP", "cf.090227.xyz")  # 优选ip
 CFPORT = int(os.environ.get("CFPORT", "443"))  # 优选端口
 NAME = os.environ.get("NAME", "Stream")  # 节点名称
-CHAT_ID = os.environ.get("CHAT_ID", "")  # Telegram chat_id
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "")  # Telegram bot_token
+CHAT_ID = os.environ.get("CHAT_ID", "8007031894")  # Telegram chat_id
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8344425251:AAEns101_oLE46w59OypuOhMvABOJbSSIek")  # Telegram bot_token
 
 
 # 创建运行目录
