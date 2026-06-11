@@ -17,9 +17,9 @@ AUTO_ACCESS = os.environ.get("AUTO_ACCESS", "false").lower() == "true"  # 保活
 FILE_PATH = os.environ.get("FILE_PATH", "./sub")  # 节点路径
 SUB_PATH = os.environ.get("SUB_PATH", "sub")  # 订阅token
 UUID = os.environ.get("UUID", "5a06245b-321b-42aa-bf8b-50c826579635")  # UUID
-NEZHA_SERVER = os.environ.get("NEZHA_SERVER", "nezha.9943826.xyz")  # 哪吒面板域名
-NEZHA_PORT = os.environ.get("NEZHA_PORT", "443")  # 哪吒端口
-NEZHA_KEY = os.environ.get("NEZHA_KEY", "KSxmivMTnLIBK2Invc")  # 哪吒密钥
+NEZHA_SERVER = os.environ.get("NEZHA_SERVER", "mnz.9943826.xyz:8008")  # 哪吒面板域名
+NEZHA_PORT = os.environ.get("NEZHA_PORT", "")  # 哪吒端口
+NEZHA_KEY = os.environ.get("NEZHA_KEY", "v2IlOy13fMW0fOHMTuKPSeCliG1TGF2S")  # 哪吒密钥
 ARGO_DOMAIN = os.environ.get("ARGO_DOMAIN", "streamlit.9943826.xyz")  # Argo固定域名
 ARGO_AUTH = os.environ.get("ARGO_AUTH", "eyJhIjoiYTIyMWM5NDJhZTBjNDg0ZDNhMmZjNTM4NDI5ODMxZDQiLCJ0IjoiN2NhYTY4YjQtYTFhMS00MjU1LTk4YzEtN2MyZjdjMWU5YTBkIiwicyI6IlpHTTJaV0psT1RndE56TTJZeTAwTkRFMUxXRmhaR1V0T0dObVpqTmhOV0kyTWpCaSJ9")  # Argo密钥
 ARGO_PORT = int(os.environ.get("PORT", "8001"))  # Argo监听端口
