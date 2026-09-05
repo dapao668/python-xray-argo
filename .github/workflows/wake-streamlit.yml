@@ -1,0 +1,33 @@
+name: Streamlit 唤醒 (curl)
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ service-down-wakeup ]
+
+concurrency:
+  group: wake-streamlit
+  cancel-in-progress: true
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 触发信息
+        run: |
+          echo "触发方式: ${{ github.event_name }}"
+          echo "Event Type: ${{ github.event.action }}"
+
+      - name: curl 唤醒 Streamlit（两次 GET）
+        env:
+          STREAMLIT_APP_URL: ${{ vars.STREAMLIT_APP_URL || 'https://python-xray-argo-ncxfwxhsrtehi9dodzhsag.streamlit.app/' }}
+        run: |
+          echo "目标: $STREAMLIT_APP_URL"
+          echo "== 第一次 GET：触发唤醒 =="
+          curl -sS --max-time 90 -o /dev/null -w "HTTP %{http_code} (%{time_total}s)\n" "$STREAMLIT_APP_URL" || true
+          echo "等待 8s 让应用起来（Streamlit 3-10s 生效）..."
+          sleep 8
+          echo "== 第二次 GET：确认/续醒 =="
+          curl -sS --max-time 90 -o /dev/null -w "HTTP %{http_code} (%{time_total}s)\n" "$STREAMLIT_APP_URL" || true
+          echo "完成：唤醒请求已发出，应用 3-10s 内恢复"
