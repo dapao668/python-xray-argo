@@ -1,33 +1,43 @@
-name: Streamlit 唤醒 (curl)
+name: Streamlit 唤醒 (selenium 点击)
 
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [ service-down-wakeup ]
-
-concurrency:
-  group: wake-streamlit
-  cancel-in-progress: true
+    types: [service-down-wakeup]
 
 jobs:
-  wake:
+  wakeup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 触发信息
+      - name: 检查触发事件
         run: |
-          echo "触发方式: ${{ github.event_name }}"
-          echo "Event Type: ${{ github.event.action }}"
+          echo "Workflow triggered by: ${{ github.event_name }}"
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "触发事件类型 (Event Type): ${{ github.event.action }}"
+            echo "收到来自 Uptime Kuma 的下线通知，开始执行自动唤醒流程..."
+          else
+            echo "工作流被手动触发，开始执行唤醒..."
+          fi
 
-      - name: curl 唤醒 Streamlit（两次 GET）
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Chromium
+        uses: browser-actions/setup-chromium@v2
+
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: 安装 Python 依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r keep/requirements.txt
+
+      - name: 执行 Streamlit 唤醒脚本 (点击唤醒按钮)
         env:
           STREAMLIT_APP_URL: ${{ vars.STREAMLIT_APP_URL || 'https://python-xray-argo-ncxfwxhsrtehi9dodzhsag.streamlit.app/' }}
         run: |
-          echo "目标: $STREAMLIT_APP_URL"
-          echo "== 第一次 GET：触发唤醒 =="
-          curl -sS --max-time 90 -o /dev/null -w "HTTP %{http_code} (%{time_total}s)\n" "$STREAMLIT_APP_URL" || true
-          echo "等待 8s 让应用起来（Streamlit 3-10s 生效）..."
-          sleep 8
-          echo "== 第二次 GET：确认/续醒 =="
-          curl -sS --max-time 90 -o /dev/null -w "HTTP %{http_code} (%{time_total}s)\n" "$STREAMLIT_APP_URL" || true
-          echo "完成：唤醒请求已发出，应用 3-10s 内恢复"
+          python keep/streamlit-keep.py
